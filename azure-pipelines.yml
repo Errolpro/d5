@@ -12,14 +12,19 @@ steps:
     inputs:
       mavenPomFile: 'pom.xml'
       goals: 'clean package'
-
+  
+  
   # Step 2: Find generated JAR/WAR
   - powershell: |
-      Write-Host "Searching for generated artifacts..."
+      Write-Host "=== PROJECT STRUCTURE ==="
 
-      Get-ChildItem -Path "$(Build.SourcesDirectory)" `
-        -Recurse -Include *.war,*.jar |
-        Select-Object FullName, Length
+      Get-ChildItem "$(Build.SourcesDirectory)" -Recurse -Filter pom.xml |
+      Select-Object FullName
+
+      Write-Host "=== GENERATED JAR AND WAR FILES ==="
+
+      Get-ChildItem "$(Build.SourcesDirectory)" -Recurse -Include *.jar,*.war |
+      Select-Object FullName, Length
 
     displayName: 'Check Generated Files'
 
